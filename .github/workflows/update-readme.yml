@@ -2,7 +2,7 @@ name: Update README with Blog posts
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # 매일 자정(UTC)에 실행
+    - cron: '*/5 * * * *'  # 5분마다 실행
   push:
     branches: [ main ]    # main 브랜치에 push가 발생할 때도 실행
   workflow_dispatch:      # 수동 실행 가능
@@ -19,6 +19,7 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 1
+        ref: main
       
     - name: Setup Node.js
       uses: actions/setup-node@v3
@@ -32,15 +33,23 @@ jobs:
     - name: Update README
       run: npm run update
       
+    - name: Check for changes
+      id: git_status
+      run: |
+        git status --porcelain
+        echo "changed=$(git status --porcelain | wc -l)" >> $GITHUB_OUTPUT
+      
     - name: Commit changes
+      if: steps.git_status.outputs.changed != '0'
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git add README.md
-        git diff --quiet && git diff --staged --quiet || git commit -m "docs: Update README with latest blog posts"
+        git commit -m "docs: Update README with latest blog posts [skip ci]"
         
     - name: Push changes
+      if: steps.git_status.outputs.changed != '0'
       uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ github.ref }} 
+        branch: main 
