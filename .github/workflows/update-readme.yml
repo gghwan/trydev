@@ -3,7 +3,13 @@ name: Update README with Blog posts
 on:
   schedule:
     - cron: '0 0 * * *'  # 매일 자정(UTC)에 실행
+  push:
+    branches: [ main ]    # main 브랜치에 push가 발생할 때도 실행
   workflow_dispatch:      # 수동 실행 가능
+
+# 워크플로우 권한 설정
+permissions:
+  contents: write
 
 jobs:
   update-readme:
@@ -11,11 +17,14 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
+      with:
+        fetch-depth: 1
       
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '20'
+        cache: 'npm'
         
     - name: Install dependencies
       run: npm install
