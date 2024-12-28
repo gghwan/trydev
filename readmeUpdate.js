@@ -28,13 +28,21 @@ let text = `# 안녕하세요! 👋
 const parser = new Parser({
   headers: {
     Accept: "application/rss+xml, application/xml, text/xml; q=0.1",
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache'
   },
+  timeout: 5000,
 });
 
 (async () => {
   try {
     // 피드 목록
     const feed = await parser.parseURL("https://trydev.tistory.com/rss");
+    console.log("피드 데이터:", feed); // 디버깅용 로그 추가
+    
+    if (!feed || !feed.items) {
+      throw new Error("피드 데이터가 올바르지 않습니다.");
+    }
     
     // 가져올 포스트 수 결정 (최대 5개)
     const postCount = Math.min(5, feed.items.length);
@@ -56,6 +64,7 @@ const parser = new Parser({
     writeFileSync("README.md", text, "utf8");
     console.log("README.md 업데이트 완료");
   } catch (error) {
-    console.error("RSS 피드를 가져오는 중 오류가 발생했습니다:", error);
+    console.error("상세 에러 정보:", error);
+    process.exit(1); // 에러 발생 시 프로세스 종료
   }
 })();
