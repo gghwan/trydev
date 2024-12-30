@@ -2,14 +2,14 @@ name: Update README with Blog posts
 
 on:
   schedule:
-    - cron: '0 */1 * * *'  # 1시간마다 실행
+    - cron: '0 */1 * * *'
   push:
-    branches: [ main ]    # main 브랜치에 push가 발생할 때도 실행
-  workflow_dispatch:      # 수동 실행 가능
+    branches: [ main ]
+  workflow_dispatch:
 
-# 워크플로우 권한 설정
 permissions:
   contents: write
+  actions: write
 
 jobs:
   update-readme:
@@ -19,8 +19,8 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 1
-        ref: main
-      
+        token: ${{ secrets.GITHUB_TOKEN }}
+        
     - name: Setup Node.js
       uses: actions/setup-node@v3
       with:
@@ -28,28 +28,21 @@ jobs:
         cache: 'npm'
         
     - name: Install dependencies
-      run: npm install
-      
-    - name: Update README
-      run: npm run update
-      
-    - name: Check for changes
-      id: git_status
       run: |
-        git status --porcelain
-        echo "changed=$(git status --porcelain | wc -l)" >> $GITHUB_OUTPUT
-      
-    - name: Commit changes
-      if: steps.git_status.outputs.changed != '0'
-      run: |
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git config --local user.name "github-actions[bot]"
-        git add README.md
-        git commit -m "docs: Update README with latest blog posts [skip ci]"
+        npm ci || npm install
         
-    - name: Push changes
-      if: steps.git_status.outputs.changed != '0'
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: main 
+    - name: Update README
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        node readmeUpdate.js
+        
+    - name: Commit and push if changed
+      run: |
+        if [[ -n "$(git status --porcelain)" ]]; then
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add README.md
+          git commit -m "docs: Update README with latest blog posts"
+          git push
+        fi 
