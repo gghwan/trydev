@@ -15,8 +15,8 @@
 - GitHub: [@gghwan](https://github.com/gghwan)
 
 ## 📕 Latest Blog Posts
+- [취업준비를 위한 사항 (1) 자기소개서](https://trydev.tistory.com/7)
 - [Cursor AI - Rules for AI](https://trydev.tistory.com/6)
 - [2025년 정보처리기사](https://trydev.tistory.com/5)
 - [티스토리 블로그와 깃허브 연동( rss방식  vs webhook 방식)](https://trydev.tistory.com/4)
 - [이제 초보 개발자, 또다른 시작이다.](https://trydev.tistory.com/3)
-- [맥북 M4 프로로 전환하면서 세팅 후기](https://trydev.tistory.com/2)
