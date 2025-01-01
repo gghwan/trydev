@@ -15,8 +15,8 @@
 - GitHub: [@gghwan](https://github.com/gghwan)
 
 ## 📕 Latest Blog Posts
+- [오늘은 1월 1일이다. 2025년의 날이 밝았다.](https://trydev.tistory.com/9)
 - [얼마전 까지 빅데이터 엔지니어 -&gt; 웹개발자로](https://trydev.tistory.com/8)
 - [취업준비를 위한 사항 (1) 자기소개서](https://trydev.tistory.com/7)
 - [Cursor AI - Rules for AI](https://trydev.tistory.com/6)
 - [2025년 정보처리기사](https://trydev.tistory.com/5)
-- [티스토리 블로그와 깃허브 연동( rss방식  vs webhook 방식)](https://trydev.tistory.com/4)
