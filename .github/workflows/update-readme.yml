@@ -2,7 +2,7 @@ name: Update README with Blog posts
 
 on:
   schedule:
-    - cron: '0 */1 * * *'
+    - cron: '*/30 * * * *'
   push:
     branches: [ main ]
   workflow_dispatch:
@@ -19,6 +19,7 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 1
+        ref: ${{ github.ref }}
         
     - name: Setup Node.js
       uses: actions/setup-node@v3
@@ -32,6 +33,8 @@ jobs:
         
     - name: Debug
       run: |
+        echo "Current time: $(date)"
+        echo "Current branch: ${{ github.ref }}"
         curl -v https://trydev.tistory.com/rss
         
     - name: Update README
@@ -43,5 +46,4 @@ jobs:
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
         git add README.md
-        git diff-index --quiet HEAD || git commit -m "docs: Update README with latest blog posts"
-        git push 
+        git diff-index --quiet HEAD || (git commit -m "docs: Update README with latest blog posts [skip ci]" && git push) 

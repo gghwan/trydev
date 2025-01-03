@@ -29,9 +29,11 @@ const parser = new Parser({
   headers: {
     Accept: "application/rss+xml, application/xml, text/xml; q=0.1",
     'Cache-Control': 'no-cache',
-    'Pragma': 'no-cache'
+    'Pragma': 'no-cache',
+    'User-Agent': 'Mozilla/5.0 (compatible; GitHub-Actions-Bot; +https://github.com/gghwan)'
   },
-  timeout: 5000,
+  timeout: 10000,
+  maxRedirects: 5
 });
 
 (async () => {
@@ -45,7 +47,7 @@ const parser = new Parser({
     }
     
     // 가져올 포스트 수 결정 (최대 5개)
-    const postCount = Math.min(5, feed.items.length);
+    const postCount = Math.min(7, feed.items.length);
     
     if (postCount === 0) {
       text += "\n아직 작성된 블로그 포스트가 없습니다.";
@@ -64,7 +66,9 @@ const parser = new Parser({
     writeFileSync("README.md", text, "utf8");
     console.log("README.md 업데이트 완료");
   } catch (error) {
-    console.error("상세 에러 정보:", error);
-    process.exit(1); // 에러 발생 시 프로세스 종료
+    console.error("RSS 피드 URL:", "https://trydev.tistory.com/rss");
+    console.error("에러 메시지:", error.message);
+    console.error("스택 트레이스:", error.stack);
+    process.exit(1);
   }
 })();

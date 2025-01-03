@@ -4,7 +4,9 @@
   "main": "readmeUpdate.js",
   "type": "module",
   "scripts": {
-    "update": "node readmeUpdate.js"
+    "update": "node readmeUpdate.js",
+    "test": "node readmeUpdate.js --debug",
+    "validate": "curl https://trydev.tistory.com/rss" 
   },
   "keywords": [],
   "author": "",
